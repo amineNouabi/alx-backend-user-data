@@ -64,6 +64,7 @@ def get_db() -> connector.connection.MySQLConnection:
         database=getenv("PERSONAL_DATA_DB_NAME")
     )
 
+
 def main() -> None:
     logger = get_logger()
     db = get_db()
@@ -78,6 +79,7 @@ def main() -> None:
         logger.info(msg)
     cursor.close()
     db.close()
+
 
 if __name__ == '__main__':
     main()
