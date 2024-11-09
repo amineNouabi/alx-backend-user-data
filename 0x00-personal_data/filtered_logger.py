@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Module for filter_datum function"""
+"""Module for filtering sensitive Data."""
 
 import re
 import logging
