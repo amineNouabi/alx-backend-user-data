@@ -4,7 +4,11 @@
 
 import re
 import logging
+import csv
+
 from typing import List
+
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 class RedactingFormatter(logging.Formatter):
@@ -35,3 +39,13 @@ def filter_datum(fields: List[str], redaction: str,
     return re.sub(f"({'|'.join(fields)})=(.*?)(?={separator}|$)",
                   r"\1=" + redaction,
                   message)
+
+def get_logger() -> logging.Logger:
+    """Create Custom logger to format PII fields values"""
+    logger = logging.getLogger("user_data")
+    handler = logging.StreamHandler()
+    handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    logger.addHandler(handler)
+    return logger
