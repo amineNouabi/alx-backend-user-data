@@ -66,6 +66,7 @@ def get_db() -> connector.connection.MySQLConnection:
 
 
 def main() -> None:
+    """Main program connects to DB and log filtered rows"""
     logger = get_logger()
     db = get_db()
     cursor = db.cursor()
