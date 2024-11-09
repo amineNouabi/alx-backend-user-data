@@ -9,7 +9,6 @@ from typing import List
 
 from mysql import connector
 from os import getenv
-import bcrypt
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
