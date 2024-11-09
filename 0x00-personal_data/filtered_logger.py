@@ -27,5 +27,6 @@ class RedactingFormatter(logging.Formatter):
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str):
     """Replaces indecated sensitive fields values to redaction."""
-    joined_fields = '|'.join(fields)
-    return re.sub(f"({joined_fields})=(.*?)(?={separator}|$)", r"\1=" + redaction, message)
+    return re.sub(f"({'|'.join(fields)})=(.*?)(?={separator}|$)",
+                  r"\1=" + redaction,
+                  message)
