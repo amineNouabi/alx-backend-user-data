@@ -21,10 +21,11 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         record.msg = re.sub(
-            f"({"|".join(self.fields)})=(.*?)(?={self.SEPARATOR}|$)", r"\1=" + self.REDACTION, record.msg)
+            f"({'|'.join(self.fields)})=(.*?)(?={self.SEPARATOR}|$)", r"\1=" + self.REDACTION, record.msg)
         return super(RedactingFormatter, self).format(record)
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str):
     """Replaces indecated sensitive fields values to redaction."""
-    return re.sub(f"({"|".join(fields)})=(.*?)(?={separator}|$)", r"\1=" + redaction, message)
+    joined_fields = '|'.join(fields)
+    return re.sub(f"({joined_fields})=(.*?)(?={separator}|$)", r"\1=" + redaction, message)
