@@ -9,6 +9,7 @@ from typing import List
 
 from mysql import connector
 from os import getenv
+import bcrypt
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -62,7 +63,6 @@ def get_db() -> connector.connection.MySQLConnection:
         password=getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         database=getenv("PERSONAL_DATA_DB_NAME")
     )
-
 
 def main() -> None:
     logger = get_logger()
