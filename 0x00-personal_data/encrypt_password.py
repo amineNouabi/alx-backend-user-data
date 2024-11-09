@@ -9,5 +9,5 @@ import bcrypt
 
 def hash_password(password: str) -> str:
     """Hash password function"""
-    hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    hashed = bcrypt.hashpw(password, bcrypt.gensalt())
     return hashed
