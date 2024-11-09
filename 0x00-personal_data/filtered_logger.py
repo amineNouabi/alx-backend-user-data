@@ -20,9 +20,14 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """Formats and Hide sensitive data mentionned in fields"""
         record.msg = re.sub(
-            f"({'|'.join(self.fields)})=(.*?)(?={self.SEPARATOR}|$)", r"\1=" + self.REDACTION, record.msg)
+            f"({'|'.join(self.fields)})=(.*?)(?={self.SEPARATOR}|$)",
+            r"\1=" + self.REDACTION,
+            record.msg
+        )
         return super(RedactingFormatter, self).format(record)
+
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str):
