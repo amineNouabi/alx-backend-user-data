@@ -40,6 +40,7 @@ def filter_datum(fields: List[str], redaction: str,
                   r"\1=" + redaction,
                   message)
 
+
 def get_logger() -> logging.Logger:
     """Create Custom logger to format PII fields values"""
     logger = logging.getLogger("user_data")
