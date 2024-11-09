@@ -70,7 +70,7 @@ def main() -> None:
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
     for row in cursor:
-        print(row[0])
+        print(row)
     cursor.close()
     db.close()
 
