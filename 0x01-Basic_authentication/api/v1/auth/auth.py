@@ -4,7 +4,7 @@
 """
 
 from typing import List, TypeVar
-from flask import Request
+from flask import request
 
 
 class Auth:
@@ -21,7 +21,7 @@ class Auth:
         """
         return None
 
-    def current_user(self, request: Request = None) -> TypeVar('User'):
+    def current_user(self, request=None) -> TypeVar('User'):
         """ Gets current logged in user
         """
         return None
