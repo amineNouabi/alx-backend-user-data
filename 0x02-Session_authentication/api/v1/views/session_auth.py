@@ -2,7 +2,7 @@
 """ Module of Sessiom auth views
 """
 from typing import List
-from flask import jsonify, make_response, request
+from flask import jsonify, make_response, request, abort
 from api.v1.views import app_views
 from os import getenv
 from models.user import User
@@ -34,3 +34,14 @@ def login():
         return response
     except Exception:
         return jsonify({'error': 'no user found for this email'}), 404
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def logout():
+    """ Session auth logout endpoint
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
