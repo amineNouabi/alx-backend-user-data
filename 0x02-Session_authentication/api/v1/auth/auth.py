@@ -9,6 +9,7 @@ from os import getenv
 
 User = TypeVar('User')
 
+
 class Auth:
     """ Auth System Class
     """
