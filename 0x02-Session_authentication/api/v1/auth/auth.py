@@ -5,7 +5,9 @@
 
 from typing import List, TypeVar
 from flask import request
+from os import getenv
 
+User = TypeVar('User')
 
 class Auth:
     """ Auth System Class
@@ -31,7 +33,14 @@ class Auth:
             return None
         return request.headers.get("Authorization")
 
-    def current_user(self, request=None) -> TypeVar('User'):
+    def current_user(self, request=None) -> User:
         """ Gets current logged in user
         """
         return None
+
+    def session_cookie(self, request=None):
+        """ Gets user cookie for session_if from request
+        """
+        if request is None:
+            return None
+        return request.cookies.get(getenv("SESSION_NAME", "_my_session_id"))
