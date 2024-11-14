@@ -35,14 +35,14 @@ class SessionDBAuth(SessionExpAuth):
                 {'session_id': session_id}
             )[0]
             if self.session_duration <= 0:
-                return session.get("user_id")
-            if not session.get("created_at"):
+                return session.user_id
+            if not session.created_at:
                 return None
-            if session.get("created_at") + \
+            if session.created_at + \
                 timedelta(seconds=self.session_duration) <= \
-                    datetime.now():
+                    datetime.utcnow():
                 return None
-            return session.get("user_id")
+            return session.user_id
         except Exception:
             return None
 
