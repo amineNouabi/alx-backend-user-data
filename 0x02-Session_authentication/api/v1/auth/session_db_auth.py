@@ -2,6 +2,9 @@
 
 """ Session Expiration Auth Module
 """
+
+from typing import List
+from datetime import datetime, timedelta
 from models.user_session import UserSession
 from api.v1.auth.session_exp_auth import SessionExpAuth
 
@@ -16,7 +19,9 @@ class SessionDBAuth(SessionExpAuth):
         session_id = super().create_session(user_id)
         if user_id is None or session_id is None:
             return None
-        session = UserSession({'id': session_id, 'user_id': user_id})
+        session = UserSession()
+        session.user_id = user_id
+        session.session_id = session_id
         session.save()
         return session_id
 
@@ -25,10 +30,21 @@ class SessionDBAuth(SessionExpAuth):
         """
         if not session_id:
             return None
-        session: UserSession = UserSession.get(session_id)
-        if not session:
+        try:
+            session: UserSession = UserSession.search(
+                {'session_id': session_id}
+            )[0]
+            if self.session_duration <= 0:
+                return session.get("user_id")
+            if not session.get("created_at"):
+                return None
+            if session.get("created_at") + \
+                timedelta(seconds=self.session_duration) <= \
+                    datetime.now():
+                return None
+            return session.get("user_id")
+        except Exception:
             return None
-        return session.user_id
 
     def destroy_session(self, request=None):
         """ Destroys session
@@ -36,9 +52,13 @@ class SessionDBAuth(SessionExpAuth):
         session_id = self.session_cookie(request)
         if not session_id:
             return False
-        session: UserSession = UserSession.get(session_id)
-        if not session:
+        try:
+            session: UserSession = UserSession.search(
+                {'session_id': session_id}
+            )
+            if not session or not len(session):
+                return False
+            session[0].remove()
+            return True
+        except Exception:
             return False
-        super().destroy_session(request)
-        session.remove()
-        return True
