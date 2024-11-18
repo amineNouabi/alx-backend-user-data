@@ -21,10 +21,15 @@ class User(Base):
     session_id = Column(String(250))
     reset_token = Column(String(250))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, email, hashed_password, *args, **kwargs):
         """ Constructor
         """
-        if kwargs:
-            for key, value in kwargs.items():
-                if key != "__class__":
-                    setattr(self, key, value)
+        if email and hashed_password:
+            self.email = email
+            self.hashed_password = hashed_password
+        elif kwargs:
+            self.email = kwargs.get('email', '')
+            self.hashed_password = kwargs.get('hashed_password', '')
+        elif len(args) == 2:
+            self.email = args[0]
+            self.hashed_password = args[1]
