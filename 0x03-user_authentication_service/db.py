@@ -41,7 +41,7 @@ class DB:
         self.__session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """ Finds user by selected column and value.
         """
         user_fields = ['id',

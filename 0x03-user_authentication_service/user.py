@@ -30,6 +30,3 @@ class User(Base):
         elif kwargs:
             self.email = kwargs.get('email', '')
             self.hashed_password = kwargs.get('hashed_password', '')
-        elif len(args) == 2:
-            self.email = args[0]
-            self.hashed_password = args[1]
