@@ -44,7 +44,7 @@ class DB:
         """
         new_user = User(email=email, hashed_password=hashed_password)
         self._session.add(new_user)
-        self.__session.commit()
+        self._session.commit()
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
@@ -53,7 +53,7 @@ class DB:
         for key in kwargs.keys():
             if key not in USER_FIELDS:
                 raise InvalidRequestError
-        user = self.__session.query(User).filter_by(**kwargs).first()
+        user = self._session.query(User).filter_by(**kwargs).first()
         if not user:
             raise NoResultFound
         return user
@@ -67,4 +67,4 @@ class DB:
                 setattr(user, key, value)
             else:
                 raise ValueError
-        self.__session.commit()
+        self._session.commit()
