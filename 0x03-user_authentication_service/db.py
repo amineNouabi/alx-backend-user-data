@@ -11,6 +11,11 @@ from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
+USER_FIELDS = ['id',
+               'email',
+               'hashed_password',
+               'reset_token',
+               'session_id']
 
 class DB:
     """DB class
@@ -44,15 +49,21 @@ class DB:
     def find_user_by(self, **kwargs) -> User:
         """ Finds user by selected column and value.
         """
-        user_fields = ['id',
-                       'email',
-                       'hashed_password',
-                       'reset_token',
-                       'session_id']
         for key in kwargs.keys():
-            if key not in user_fields:
+            if key not in USER_FIELDS:
                 raise InvalidRequestError
         user = self.__session.query(User).filter_by(**kwargs).first()
         if not user:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ Update user information in database
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if key in USER_FIELDS:
+                setattr(user, key, value)
+            else:
+                raise ValueError
+        self.__session.commit()
