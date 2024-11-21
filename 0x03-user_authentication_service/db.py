@@ -17,6 +17,7 @@ USER_FIELDS = ['id',
                'reset_token',
                'session_id']
 
+
 class DB:
     """DB class
     """
