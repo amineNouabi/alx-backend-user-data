@@ -43,7 +43,11 @@ class DB:
     def find_user_by(self, **kwargs):
         """ Finds user by selected column and value.
         """
-        user_fields = ['id', 'email', 'hashed_password', 'reset_token', 'session_id']
+        user_fields = ['id',
+                       'email',
+                       'hashed_password',
+                       'reset_token',
+                       'session_id']
         for key in kwargs.keys():
             if key not in user_fields:
                 raise InvalidRequestError()
