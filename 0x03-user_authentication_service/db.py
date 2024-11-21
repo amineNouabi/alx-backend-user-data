@@ -51,8 +51,8 @@ class DB:
                        'session_id']
         for key in kwargs.keys():
             if key not in user_fields:
-                raise InvalidRequestError()
+                raise InvalidRequestError
         user = self.__session.query(User).filter_by(**kwargs).first()
         if not user:
-            raise NoResultFound()
+            raise NoResultFound
         return user
