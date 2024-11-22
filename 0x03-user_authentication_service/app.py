@@ -2,7 +2,7 @@
 """ Flask app
 """
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, redirect
 from flask.helpers import make_response
 from auth import Auth
 
@@ -54,6 +54,34 @@ def login():
     )
     response.set_cookie('session_id', session_id)
     return response
+
+
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """DELETE /sessions, - session_id
+    Find user with requested session ID, if exists, destroy session
+    Redirect user to GET /, if doesnt exists, respond with 403 HTTP
+    status
+    """
+    user_cookie = request.cookies.get("session_id", None)
+    user = AUTH.get_user_from_session_id(user_cookie)
+    if user_cookie is None or user is None:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    return redirect('/')
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile() -> str:
+    """GET /profile
+    Return 403 if session ID is invalid
+    Use session_id to find user
+    """
+    user_cookie = request.cookies.get("session_id", None)
+    user = AUTH.get_user_from_session_id(user_cookie)
+    if user_cookie is None or user is None:
+        abort(403)
+    return jsonify({"email": user}), 200
 
 
 if __name__ == "__main__":
