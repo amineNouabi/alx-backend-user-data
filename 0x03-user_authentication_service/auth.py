@@ -67,3 +67,23 @@ class Auth:
         except NoResultFound:
             pass
         return None
+
+    def get_user_from_session_id(self, session_id: str) -> str:
+        """Takes single session_id string argument
+        Returns corresponding User or None
+        """
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user.email
+        except NoResultFound:
+            return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """Takes a single user_id integer argument
+        Returns user's email or None
+        """
+        try:
+            user = self._db.find_user_by(id=user_id)
+            self._db.update_user(user.id, session_id=None)
+        except NoResultFound:
+            return None
